@@ -33,6 +33,7 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.button1 = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // listView1
@@ -73,19 +74,31 @@
             // 
             // saveFileDialog1
             // 
-            this.saveFileDialog1.Filter = "MP4 视频文件| *.mp4";
+            this.saveFileDialog1.Filter = "MP3 音频文件| *.mp3";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(12, 628);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(149, 29);
+            this.checkBox1.TabIndex = 2;
+            this.checkBox1.Text = "仅输出音频";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1148, 674);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listView1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -96,6 +109,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

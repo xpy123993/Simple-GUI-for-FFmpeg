@@ -23,7 +23,7 @@ namespace merge_video
 
         }
 
-        private void merge_video_files(string[] filenames, string output_filename)
+        private void merge_video_files_origin_format(string[] filenames, string output_filename)
         {
             Process p = new Process();
             p.StartInfo.FileName = "ffmpeg.exe";
@@ -49,6 +49,34 @@ namespace merge_video
             p.WaitForExit();
             
             System.IO.File.WriteAllLines("result.txt", new string[]{ p.StartInfo.Arguments});
+        }
+
+        private void merge_video_files_mp3_format(string[] filenames, string output_filename)
+        {
+            Process p = new Process();
+            p.StartInfo.FileName = "ffmpeg.exe";
+
+            string[] lines = new string[filenames.Length];
+            for (int i = 0; i < lines.Length; i++)
+            {
+
+                string command = string.Format("file '{0}'", filenames[i]);
+                lines[i] = command;
+            }
+
+            System.IO.File.WriteAllLines("temp.txt", lines, Encoding.GetEncoding("gbk"));
+
+            string file_list_tag = filenames[0];
+            for (int i = 1; i < filenames.Length; i++)
+            {
+                file_list_tag += "|" + filenames[i];
+            }
+
+            p.StartInfo.Arguments = string.Format("-safe 0 -f concat -i temp.txt \"{0}\" -f mp3 -y", output_filename);
+            p.Start();
+            p.WaitForExit();
+
+            System.IO.File.WriteAllLines("result.txt", new string[] { p.StartInfo.Arguments });
         }
 
         private void add_new_file(string filename)
@@ -80,25 +108,45 @@ namespace merge_video
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(listView1.Items.Count == 0)
+            if (listView1.Items.Count == 0)
             {
                 MessageBox.Show("列表为空");
                 return;
             }
+
             string[] file_list = new string[listView1.Items.Count];
-            for(int i = 0; i < file_list.Length; i++)
+            for (int i = 0; i < file_list.Length; i++)
             {
                 ListViewItem item = listView1.Items[i];
                 file_list[i] = item.SubItems[1].Text;
             }
             string output_filename = file_list[0] + "_merge.mp4";
-            saveFileDialog1.FileName = output_filename;
-            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+            if (checkBox1.Checked)
             {
-                output_filename = saveFileDialog1.FileName;
-                merge_video_files(file_list, output_filename);
-                MessageBox.Show("保存至：" + output_filename);
+                // output mp3 only
+                output_filename = file_list[0] + "_merge.mp3";
+                saveFileDialog1.FileName = output_filename;
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    output_filename = saveFileDialog1.FileName;
+                    merge_video_files_mp3_format(file_list, output_filename);
+                    MessageBox.Show("保存至：" + output_filename);
+                }
+
             }
+            else
+            {
+                // output original format only
+                output_filename = file_list[0] + "_merge.mp4";
+                saveFileDialog1.FileName = output_filename;
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    output_filename = saveFileDialog1.FileName;
+                    merge_video_files_origin_format(file_list, output_filename);
+                    MessageBox.Show("保存至：" + output_filename);
+                }
+            }
+
             
         }
     }
